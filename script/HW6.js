@@ -167,7 +167,7 @@ Array.prototype.forEach1 = function (cb, thisArg) {
   }
 };
 
-const ex2 = ['forEach1', 'forEach2'];
+const ex2 = [document.getElementsByClassName('button')];
 
 ex2.forEach1(function (el) { console.log(el, this); }, {a: 1});
 
