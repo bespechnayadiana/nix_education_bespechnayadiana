@@ -167,9 +167,10 @@ Array.prototype.forEach1 = function (cb, thisArg) {
   }
 };
 
-const ex2 = [document.getElementsByClassName('button')];
+const ex2 = [...document.getElementsByClassName('button')];
+console.dir(NodeList);
 
-ex2.forEach1(function (el) { console.log(el, this); }, {a: 1});
+ex2.forEach1(function (el) { console.log(1, el, this); }, {a: 1});
 
 // find()
 
