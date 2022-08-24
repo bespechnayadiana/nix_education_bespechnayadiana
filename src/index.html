@@ -11,6 +11,12 @@
     <link type="image/x-icon" rel="icon" href="images/favicon.ico">
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
     <link rel="stylesheet" href="css/main.min.css">
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script src="js/slider.js"></script>
+    <script src="js/items.js"></script>
+    <script src="js/index.js"></script>
     <title>MacOutlet</title>
 </head>
 <body>
@@ -70,7 +76,7 @@
                     <button class="search-button icon icon-search"></button>
                 </form>
                 <div class="wrap-settings">
-                    <div class="item-setting">
+                    <div class="item-setting" id="js-filter-toggle">
                         <span class="icon icon-filter"></span>
                     </div>
                     <div class="item-setting">
@@ -78,14 +84,100 @@
                     </div>
                 </div>
             </div>
-            <div class="products-list" id="js-products"></div>
+            <div class="content" id="js-content">
+                <div class="filter" id="js-filter">
+                    <div class="wrap">
+                        <div class="price filter-block">
+                            <div class="filter-container">
+                                <span>Price</span>
+                                <span class="i icon-arrow_left"></span>
+                            </div>
+                            <div class="filter-value">
+                                <div class=" form-group">
+                                    <span>From</span>
+                                    <input type="number" name="min-price" class="form-control" min="0" max="10000" value="" id="min-price">
+                                </div>
+                                <div class="form-group">
+                                    <span>To</span>
+                                    <input type="number" name="max-price" class="form-control" min="0" max="10000" value="" id="max-price">
+                                </div>
+                            </div>
+                        </div>
+                        <div id="js-dynamic-filter"></div>
+                        <div class="display filter-block">
+                            <div class="filter-container">
+                                <span>Display</span>
+                                <span class="i icon-arrow_left"></span>
+                            </div>
+                            <div class="filter-value">
+                                <div class="filter-collapse">
+                                    <div class="custom-checkbox">
+                                        <label class="custom-control-label">
+                                            <input type="checkbox" class="custom-checkbox-input" name="display">
+                                            <span class="icon icon-check"></span>
+                                            <div class="value-range">
+                                                <span class="display-min">2</span>
+                                                -
+                                                <span class="display-max">5</span>
+                                                inch
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="custom-checkbox">
+                                        <label class="custom-control-label">
+                                            <input type="checkbox" class="custom-checkbox-input" name="display">
+                                            <span class="icon icon-check"></span>
+                                            <div class="value-range">
+                                                <span class="display-min">5</span>
+                                                -
+                                                <span class="display-max">7</span>
+                                                inch
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="custom-checkbox">
+                                        <label class="custom-control-label">
+                                            <input type="checkbox" class="custom-checkbox-input" name="display">
+                                            <span class="icon icon-check"></span>
+                                            <div class="value-range">
+                                                <span class="display-min">7</span>
+                                                -
+                                                <span class="display-max">12</span>
+                                                inch
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="custom-checkbox">
+                                        <label class="custom-control-label">
+                                            <input type="checkbox" class="custom-checkbox-input" name="display">
+                                            <span class="icon icon-check"></span>
+                                            <div class="value-range">
+                                                <span class="display-min">12</span>
+                                                -
+                                                <span class="display-max">16</span>
+                                                inch
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="custom-checkbox">
+                                        <label class="custom-control-label">
+                                            <input type="checkbox" class="custom-checkbox-input" name="display">
+                                            <span class="icon icon-check"></span>
+                                            <div class="value-range">
+                                                <span class="display-min">16</span>
+                                                + inch
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="products-list" id="js-products"></div>
+            </div>
         </div>
+        <div class="modal-container" id="js-modal-container"></div>
     </main>
-    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-    <script src="js/slider.js"></script>
-    <script src="js/items.js"></script>
-    <script src="js/index.js"></script>
 </body>
 </html>
