@@ -1,8 +1,8 @@
 const init = () => {
   renderProducts(items);
+  renderDynamicFilters();
   setupFilterHandlers();
   setupDetailModalHandlers();
-  renderDynamicFilters();
 };
 
 const setupDetailModalHandlers = () => {
@@ -26,9 +26,52 @@ const setupDetailModalHandlers = () => {
 const setupFilterHandlers = () => {
   const filterBtn = document.getElementById('js-filter-toggle');
   const content = document.getElementById('js-content');
+  const filter = document.getElementById('js-filter');
   filterBtn.addEventListener('click', () => {
     content.classList.toggle('filter-opened');
   });
+
+  const onPriceChange = (e) => {
+    if(+e.target.value <= +e.target.min) e.target.value = e.target.min;
+    if(+e.target.value >= +e.target.max) e.target.value = e.target.max;
+    setTimeout(calculateFilter);
+  };
+
+  const from = filter.querySelector('#js-min-price');
+  from.addEventListener('change', onPriceChange);
+
+  const to = filter.querySelector('#js-max-price');
+  to.addEventListener('change', onPriceChange);
+
+  filter.addEventListener('click', (e) => {
+    if (e.target.tagName === 'INPUT' && e.target.closest('label')) {
+      setTimeout(calculateFilter);
+    }
+  });
+};
+
+const getCheckedValues = (checkboxes) => [...checkboxes].map((input) => input.value);
+
+const calculateFilter = () => {
+  const filter = document.getElementById('js-filter');
+  const from = +filter.querySelector('#js-min-price').value;
+  const to = +filter.querySelector('#js-max-price').value;
+  const colors = getCheckedValues(filter.querySelectorAll('#js-colors input:checked'));
+  const memories = getCheckedValues(filter.querySelectorAll('#js-memory input:checked'));
+  const os = getCheckedValues(filter.querySelectorAll('#js-os input:checked'));
+  const display = getCheckedValues(filter.querySelectorAll('#js-display input:checked')).map((d) => {
+    const range = d.split('-');
+    return [+range[0], +range[1] || Infinity];
+  });
+
+  const filtered = items.filter((p) => {
+    const isColor = colors.length ? colors.some((color) => p.color.includes(color)) : true;
+    const isMemory = memories.length ? memories.includes(p.storage?.toString()) : true;
+    const isOS = os.length ? os.includes(p.os) : true;
+    const isDisplay = display.length ? display.some(([min, max]) => p.display >= min && p.display <= max) : true;
+    return from <= p.price && to >= p.price && isColor && isMemory && isOS && isDisplay;
+  });
+  renderProducts(filtered);
 };
 
 const getReviewsText = (reviews) => {
@@ -55,25 +98,31 @@ const closeDetailModal = (container) => {
 
 const getFilterOptions= () => {
   const filters = items.reduce((res, product) => {
+    res.min = Math.min(res.min, product.price);
+    res.max = Math.max(res.max, product.price);
     if (product.storage) res.memories[product.storage] = 1;
     if (product.os) res.software[product.os] = 1;
     product.color.forEach((color) => res.colors[color] = 1);
     return res;
   }, {
+    min: Infinity,
+    max: 0,
     colors: {},
     memories: {},
     software: {},
   });
   return {
+    min: filters.min,
+    max: filters.max,
     colors: Object.keys(filters.colors),
     memories: Object.keys(filters.memories),
     software: Object.keys(filters.software),
   }
 };
 
-const renderFiltersBlock = (label, items) => {
+const renderFiltersBlock = (label, items, id) => {
   return `
-    <div class="filter-block">
+    <div class="filter-block" id="${id}">
         <div class="filter-container">
           <span>${label}</span>
           <span class="i icon-arrow_left"></span>
@@ -97,11 +146,19 @@ const renderFiltersBlock = (label, items) => {
 
 const renderDynamicFilters = () => {
   const filters = getFilterOptions();
+  const minPrice = document.getElementById('js-min-price');
+  minPrice.value = filters.min;
+  minPrice.setAttribute('min', filters.min);
+  minPrice.setAttribute('max', filters.max);
+  const maxPrice = document.getElementById('js-max-price');
+  maxPrice.value = filters.max;
+  maxPrice.setAttribute('min', filters.min);
+  maxPrice.setAttribute('max', filters.max);
   const filterContainer = document.getElementById('js-dynamic-filter');
   filterContainer.innerHTML = `
-    ${renderFiltersBlock('Colors', filters.colors)}
-    ${renderFiltersBlock('Memory', filters.memories)}
-    ${renderFiltersBlock('OS', filters.software)}
+    ${renderFiltersBlock('Colors', filters.colors, 'js-colors')}
+    ${renderFiltersBlock('Memory', filters.memories,'js-memory')}
+    ${renderFiltersBlock('OS', filters.software, 'js-os')}
   `;
 };
 
