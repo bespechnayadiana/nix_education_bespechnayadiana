@@ -275,6 +275,7 @@ li {
 .filter {
   display: none;
   min-width: 300px;
+  width: 33.33%;
   margin: 0 62px 50px;
   border: 1px solid var(--light-gray);
   border-radius: 10px;
@@ -382,6 +383,8 @@ li {
   flex-wrap: wrap;
   margin: 0 -31px;
   justify-content: center;
+  height: fit-content;
+  width: 100%;
 
   @media (min-width: #{$screen-lg-min}) {
     justify-content: flex-start;
@@ -418,6 +421,7 @@ li {
     font-size: 24px;
     margin-bottom: 8px;
     color: var(--black);
+    min-height: 56px;
   }
 
   .amount-items {

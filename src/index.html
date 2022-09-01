@@ -85,7 +85,7 @@
                 </div>
             </div>
             <div class="content" id="js-content">
-                <div class="filter" id="js-filter">
+                <form class="filter" id="js-filter">
                     <div class="wrap">
                         <div class="price filter-block">
                             <div class="filter-container">
@@ -95,16 +95,16 @@
                             <div class="filter-value">
                                 <div class=" form-group">
                                     <span>From</span>
-                                    <input type="number" name="min-price" class="form-control" min="0" max="10000" value="" id="min-price">
+                                    <input type="number" name="min-price" class="form-control" value="" id="js-min-price">
                                 </div>
                                 <div class="form-group">
                                     <span>To</span>
-                                    <input type="number" name="max-price" class="form-control" min="0" max="10000" value="" id="max-price">
+                                    <input type="number" name="max-price" class="form-control" value="" id="js-max-price">
                                 </div>
                             </div>
                         </div>
                         <div id="js-dynamic-filter"></div>
-                        <div class="display filter-block">
+                        <div class="display filter-block" id="js-display">
                             <div class="filter-container">
                                 <span>Display</span>
                                 <span class="i icon-arrow_left"></span>
@@ -113,7 +113,7 @@
                                 <div class="filter-collapse">
                                     <div class="custom-checkbox">
                                         <label class="custom-control-label">
-                                            <input type="checkbox" class="custom-checkbox-input" name="display">
+                                            <input type="checkbox" class="custom-checkbox-input" value="2-5" name="display">
                                             <span class="icon icon-check"></span>
                                             <div class="value-range">
                                                 <span class="display-min">2</span>
@@ -125,7 +125,7 @@
                                     </div>
                                     <div class="custom-checkbox">
                                         <label class="custom-control-label">
-                                            <input type="checkbox" class="custom-checkbox-input" name="display">
+                                            <input type="checkbox" class="custom-checkbox-input" value="5-7" name="display">
                                             <span class="icon icon-check"></span>
                                             <div class="value-range">
                                                 <span class="display-min">5</span>
@@ -137,7 +137,7 @@
                                     </div>
                                     <div class="custom-checkbox">
                                         <label class="custom-control-label">
-                                            <input type="checkbox" class="custom-checkbox-input" name="display">
+                                            <input type="checkbox" class="custom-checkbox-input" value="7-12" name="display">
                                             <span class="icon icon-check"></span>
                                             <div class="value-range">
                                                 <span class="display-min">7</span>
@@ -149,7 +149,7 @@
                                     </div>
                                     <div class="custom-checkbox">
                                         <label class="custom-control-label">
-                                            <input type="checkbox" class="custom-checkbox-input" name="display">
+                                            <input type="checkbox" class="custom-checkbox-input" value="12-16" name="display">
                                             <span class="icon icon-check"></span>
                                             <div class="value-range">
                                                 <span class="display-min">12</span>
@@ -161,7 +161,7 @@
                                     </div>
                                     <div class="custom-checkbox">
                                         <label class="custom-control-label">
-                                            <input type="checkbox" class="custom-checkbox-input" name="display">
+                                            <input type="checkbox" class="custom-checkbox-input" value="16-+" name="display">
                                             <span class="icon icon-check"></span>
                                             <div class="value-range">
                                                 <span class="display-min">16</span>
@@ -173,7 +173,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>
                 <div class="products-list" id="js-products"></div>
             </div>
         </div>
