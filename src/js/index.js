@@ -1,24 +1,144 @@
+let cart = [];
+
 const init = () => {
+  loadCart();
   renderProducts(items);
   renderDynamicFilters();
   setupFilterHandlers();
   setupDetailModalHandlers();
+  setupCartHandlers();
+  setupProductHandlers();
+  setupFilterBlock();
+};
+
+const saveCart = () => {
+  localStorage.setItem('cart', JSON.stringify(cart));
+};
+
+const loadCart = () => {
+  const c = localStorage.getItem('cart');
+  try {
+    cart = Array.isArray(JSON.parse(c)) ? JSON.parse(c) : [];
+    renderCart();
+  } catch (e) {
+    console.error('Load cart exception:', e.message);
+  }
+};
+
+const setupProductHandlers = () => {
+  const products = document.getElementById('js-products');
+  products.addEventListener('click', (e) => {
+    const card = e.target.closest('.card');
+    if (!card) return;
+    const product = items.find((p) => p.id === +card.dataset.id);
+    if (!e.target.classList.contains('js-no-dialog')) renderDetailModal(product);
+    if (e.target.classList.contains('add-to-cart')) addToCart(product);
+  });
 };
 
 const setupDetailModalHandlers = () => {
-  const openProduct = document.getElementById('js-products');
-  const modalContainer= document.getElementById('js-modal-container');
-  openProduct.addEventListener('click', (e) => {
-    const card = e.target.closest('.card');
-    if (!e.target.classList.contains('js-no-dialog') && card) {
-      console.log(card.dataset.id);
-      const product = items.find((p) => p.id === +card.dataset.id);
-      renderDetailModal(modalContainer, product);
-    }
-  });
+  const modalContainer = document.getElementById('js-modal-container');
   modalContainer.addEventListener('click', (e) => {
     if (e.target.classList.contains('overlay')) {
       closeDetailModal(modalContainer);
+    }
+  });
+};
+
+const setupCartHandlers = () => {
+  const cartBtn = document.getElementById('js-cart-toggle');
+  const cartContent = document.getElementById('js-cart');
+  cartBtn.addEventListener('click', () => {
+    if (cartBtn.classList.contains('empty')) return;
+    cartContent.classList.toggle('cart-opened');
+  });
+  cartContent.addEventListener('click', (e) => {
+    const i = e.target.closest('.product-buy')?.dataset?.index;
+    if (e.target.classList.contains('delete')) {
+      cart.splice(i, 1);
+      renderCart();
+      saveCart();
+    }
+    if (e.target.classList.contains('counter-button')) {
+      if (e.target.classList.contains('decrement')) {
+        if (cart[i].num > 1) cart[i].num--;
+      } else {
+        if (cart[i].num < 4) cart[i].num++;
+      }
+      renderCart();
+      saveCart();
+    }
+  });
+};
+
+const addToCart = (p) => {
+  const inCart = cart.find((ci) => ci.product.id === p.id);
+  if (inCart) {
+    if(inCart.num >= 4) return;
+    inCart.num++;
+  } else {
+    cart.push({
+      product: p,
+      num: 1,
+    });
+  }
+  renderCart();
+  saveCart();
+};
+
+const calculateCartTotals = () => {
+  return cart.reduce((res, { product, num }) => {
+    res.items += num;
+    res.price += num * product.price;
+    return res;
+  }, {items: 0, price: 0});
+};
+
+const renderCart = () => {
+  const cartToggle = document.getElementById('js-cart-toggle');
+  const cartCount = cartToggle.querySelector('#js-cart-count');
+  const cartBlock = document.getElementById('js-cart');
+  const cartContent = cartBlock.querySelector('#js-cart-content');
+  const totals = calculateCartTotals();
+  cartToggle.classList.toggle('empty', !totals.items);
+  cartCount.innerText = totals.items;
+  if (!totals.items) cartBlock.classList.remove('cart-opened');
+  cartContent.innerHTML = `
+   ${cart.map(({ product, num }, i) => `
+      <div class="product-buy" data-index="${i}">
+         <div class="product-photo">
+             <img src="images/${product.imgUrl}" alt="Photo product">
+         </div>
+         <div class="info">
+             <div class="product-name">${product.name}</div>
+             <div class="price">$${product.price}</div>
+         </div>
+         <batton class="decrement counter-button" ${num <= 1 ? 'disabled' : ''}><</batton>
+         <input type="text" class="product-counter " value="${num}">
+         <batton class="increment counter-button" ${num >= 4 ? 'disabled' : ''}>></batton>
+         <div class="delete">x</div>
+       </div>
+   `).join('')}
+   <div class="total-price">
+       <div class="amount">
+           <span>Total amount: </span>${totals.items} ptc.
+       </div>
+       <div class="price">
+           <span>Total price: </span>${totals.price}$
+       </div>
+   </div>
+  `
+};
+
+const setupFilterBlock = () => {
+  const filterContainer = document.getElementById('js-filter');
+  filterContainer.addEventListener('click', (e) => {
+    const filterBlock = e.target.closest('.filter-block');
+    if (filterBlock) {
+      filterBlock.classList.toggle('open');
+      const icl = filterBlock.querySelector('.i').classList;
+      icl.toggle('icon-arrow_left');
+      icl.toggle('icon-arrow_down');
     }
   });
 };
@@ -162,7 +282,8 @@ const renderDynamicFilters = () => {
   `;
 };
 
-const renderDetailModal = (container, product) => {
+const renderDetailModal = (product) => {
+  const container = document.getElementById('js-modal-container');
   container.innerHTML = `
     <div class="overlay"></div>
     <div class="modal-content">
