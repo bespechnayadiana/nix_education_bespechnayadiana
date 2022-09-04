@@ -26,9 +26,17 @@
                 <div class="logo">
                     <img src="images/logo.png" alt="Logotype">
                 </div>
-                <div class="shopping-cart">
+                <div class="shopping-cart empty" id="js-cart-toggle">
                     <div class="cart icon icon-cart"></div>
-                    <div class="count">3</div>
+                    <div class="count" id="js-cart-count">0</div>
+                </div>
+                <div class="shopping-cart-container" id="js-cart">
+                    <div class="header-cart">
+                        <h3 class="name-cart">Shopping Cart</h3>
+                        <div class="comment">Checkout is almost done!</div>
+                    </div>
+                   <div class="cart-content" id="js-cart-content"></div>
+                    <button class="buy">Buy</button>
                 </div>
             </div>
         </div>
