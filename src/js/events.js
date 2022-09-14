@@ -1,4 +1,4 @@
-const events = [
+let events = [
   {
     start: 0,
     duration: 15,
