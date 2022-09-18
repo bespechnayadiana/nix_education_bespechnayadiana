@@ -5,21 +5,31 @@ const init = () => {
 };
 
 const calculateIntersections = (events) => {
-  events.sort((a, b) => a.start - b.start);
+  events.sort((a, b) => b.start - a.start);
   events.forEach((event, i, arr) => {
     const e = arr
       .slice(0, i)
       .reverse()
+      .find((e) => event.start + event.duration > e.start);
+    event.rtl = e?.rtl + 1 || 0;
+  });
+  events.reverse().forEach((event, i, arr) => {
+    const prev = arr[i - 1] || {left: 0, width: 100};
+    const e = arr
+      .slice(0, i)
+      .reverse()
       .find((e) => event.start >= e.start && event.start < e.start + e.duration);
-    event.int = e?.int + 1 || 0;
+    event.ltr = e?.ltr + 1 || 0;
+    event.width = 100 / (event.rtl + event.ltr + 1);
+    event.left = prev.left + prev.width >= 100 ? 0 : prev.left + prev.width;
   });
   return events;
 };
 
 const renderEvents = () => {
   const eventsContainer = document.getElementById('js-events');
-  eventsContainer.innerHTML = calculateIntersections(events).map(({start, duration, title, int, draft}, i) => {
-    return `<div class="event ${duration <= 15 ? 'small' : ''} ${draft ? 'draft' : ''}" data-index="${i}" style="top: ${start + 1}px; height: ${duration}px; left: ${int * 200}px;">${title}</div>`;
+  eventsContainer.innerHTML = calculateIntersections(events).map(({start, duration, title, left, width, draft}, i) => {
+    return `<div class="event ${duration <= 15 ? 'small' : ''} ${draft ? 'draft' : ''}" data-index="${i}" style="top: ${start + 1}px; height: ${duration}px; left: ${left}%; width: ${width}%;">${title}</div>`;
   }).join('');
 };
 
@@ -45,17 +55,29 @@ const setupCalendarHandlers = () => {
   });
 };
 
+const renderEventModalContainer = (e) => (
+  `
+    <div class="container">
+      <input type="text" class="title" id="title" value="${e.title}">
+      <select id="start">
+        ${times.map((t) => `<option value="${t.value}" ${t.value === e.start ? 'selected' : ''}>${t.label}</option>`).join('')}
+      </select>
+      <select id="duration">
+        ${durations.map((d) => `<option value="${d.value}" ${d.value === e.duration ? 'selected' : ''}>${d.label}</option>`).join('')}
+      </select>
+    </div>
+  `
+);
+
 const renderCreateEventModal = (e) => {
   const container = document.getElementById('js-modal-container');
   container.innerHTML = `
     <div class="overlay"></div>
     <div class="modal-content">
-        <div class="container">
-          <div class="title">${e.title}</div>
-          <div class="start">${e.start}</div>
-          <div class="duration">${e.duration}</div>
+        ${renderEventModalContainer(e)}
+        <div class="footer">
+            <button class="create">Save</button>
         </div>
-        <button class="create">Save</button>
      </div>
   `;
 };
@@ -65,17 +87,24 @@ const renderEditEventModal = (e, i) => {
   container.innerHTML = `
     <div class="overlay"></div>
     <div class="modal-content">
-        <div class="container">
-          <div class="title">${e.title}</div>
-          <div class="start">${e.start}</div>
-          <div class="duration">${e.duration}</div>
-        </div>
+        ${renderEventModalContainer(e)}
         <div class="footer">
           <button class="save" data-index="${i}">Save</button>
           <button class="del" data-index="${i}">Delete</button>
         </div>
      </div>
   `;
+};
+
+const getEventDetails = () => {
+  const title = document.getElementById('title').value;
+  const start = +document.getElementById('start').value;
+  const duration = +document.getElementById('duration').value;
+  return {
+    title,
+    start,
+    duration,
+  };
 };
 
 const setupEventModalHandlers = () => {
@@ -87,7 +116,8 @@ const setupEventModalHandlers = () => {
       renderEvents();
     }
     if (e.target.classList.contains('create')) {
-      events.forEach((e) => e.draft = false);
+      const i = events.findIndex((e) => e.draft);
+      events[i] = getEventDetails();
       modalContainer.innerHTML = '';
       renderEvents();
     }
@@ -97,6 +127,7 @@ const setupEventModalHandlers = () => {
       renderEvents();
     }
     if (e.target.classList.contains('save')) {
+      events[e.target.dataset.index] = getEventDetails();
       modalContainer.innerHTML = '';
       renderEvents();
     }

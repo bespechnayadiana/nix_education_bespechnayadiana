@@ -23,7 +23,6 @@
     font-size: 12px; }
   .time .events .event {
     position: absolute;
-    width: 200px;
     background-color: #E2ECF5;
     border-left: 4px solid #6E9ECF;
     min-height: 10px;
