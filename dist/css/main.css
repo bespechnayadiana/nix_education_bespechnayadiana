@@ -1,9 +1,23 @@
 .calendar {
   padding: 50px;
   font-family: 'Open Sans', sans-serif; }
+  .calendar .date {
+    position: relative; }
+    .calendar .date .day {
+      font-size: 40px;
+      font-weight: bold;
+      color: #6e9ecf;
+      padding-bottom: 20px; }
 
 .time {
   position: relative; }
+  .time .time-now {
+    width: 100%;
+    position: absolute;
+    height: 2px;
+    background-color: #6e9ecf;
+    top: 0;
+    z-index: 1; }
   .time .hour {
     height: 60px;
     border-top: 1px solid gray;
@@ -23,7 +37,6 @@
     font-size: 12px; }
   .time .events .event {
     position: absolute;
-    background-color: #E2ECF5;
     border-left: 4px solid #6E9ECF;
     min-height: 10px;
     font-size: 16px;
@@ -37,6 +50,9 @@
     font-size: 12px; }
   .time .events .draft {
     background-color: #6E9ECF; }
+
+.modal-container label {
+  display: block; }
 
 .modal-container .overlay {
   position: fixed;
@@ -57,7 +73,8 @@
   border-radius: 5px;
   width: 300px;
   height: 200px;
-  padding: 20px; }
+  padding: 20px;
+  z-index: 99999; }
   .modal-container .modal-content .container {
     min-height: 150px; }
   .modal-container .modal-content .footer {

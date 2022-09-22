@@ -45,3 +45,7 @@ let events = [
     title: "Push up branch"
   },
 ];
+
+if(!localStorage.getItem('events')) {
+  localStorage.setItem('events', JSON.stringify(events))
+}
