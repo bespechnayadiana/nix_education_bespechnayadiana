@@ -1,33 +1,20 @@
-import * as http from "http";
-import csv from 'csvtojson';
+export class Calculator {
 
-const host = 'localhost';
-const port = 8000;
+  calculation(num1, num2, op){
 
-const csvFilePath = process.cwd() + "/src/device.csv";
+    switch (op) {
 
-const requestListener = (req, res) => {
-  csv().fromFile(csvFilePath).then((jsonObj) => {
-    sendFile(jsonObj, res)
-  }, (err) => {
-    if (err) {
-      res.setHeader("Content-Type", "application/json");
-      res.writeHead(500);
-      console.log(err)
-      res.end(JSON.stringify(err));
-      return;
+      case 'sum':
+        return num1 + num2;
+
+      case 'minus':
+        return num1 - num2;
+
+      case 'multiple':
+        return num1 * num2;
+
+      case 'division':
+        return (num1 / 100) * num2;
     }
-  });
-};
-
-function sendFile(contents, res) {
-  res.setHeader("Content-Type", "application/json");
-  res.writeHead(200);
-  res.end(JSON.stringify(contents));
+  }
 }
-
-const server = http.createServer(requestListener);
-
-server.listen(port, host, () => {
-  console.log(`Server is running on http://${host}:${port}`);
-});
