@@ -1,40 +1,34 @@
 const fs = require('fs');
 const path = require('path');
+const Contacts = require("./models/contacts");
+
 
 const listContacts = () => {
-  const data = fs.readFileSync(path.join(__dirname, 'contacts.json'));
-  return JSON.parse(data);
+  return Contacts.find({});
 };
 
 const getById = (id) => {
-  const contacts = listContacts();
-  return contacts.find((c) => c.id.toString() === id);
+  return Contacts.findOne({ _id: id });
 };
 
-const addContact = (body) => {
-  const contacts = listContacts();
-  const contact = {...body, id: Date.now()};
-  contacts.push(contact);
-  fs.writeFileSync(path.join(__dirname, 'contacts.json'), JSON.stringify(contacts, 2, 2));
+const addContact = async (body) => {
+  const contact = new Contacts(body);
+  await contact.save();
   return contact;
 };
 
 const removeContact = (id) => {
-  const contacts = listContacts();
-  const index = contacts.findIndex((c) => c.id.toString() === id);
-  if (index < 0) return null;
-  const d = contacts.splice(index, 1);
-  fs.writeFileSync(path.join(__dirname, 'contacts.json'), JSON.stringify(contacts, 2, 2));
-  return d;
+  return Contacts.findOneAndDelete({ _id: id });
 };
 
 const updateContact = (id, body) => {
-  const contacts = listContacts();
-  const index = contacts.findIndex((c) => c.id.toString() === id);
-  if (index < 0) return null;
-  contacts[index] = {...contacts[index], ...body};
-  fs.writeFileSync(path.join(__dirname, 'contacts.json'), JSON.stringify(contacts, 2, 2));
-  return contacts[index];
+  return Contacts.findOneAndUpdate({ _id: id }, body, { new: true });
+};
+
+const seedContacts = async () => {
+  const data = fs.readFileSync(path.join(__dirname, 'contacts.json'));
+  await Promise.all(JSON.parse(data).map(addContact));
+  console.log('Contacts seeded!');
 };
 
 module.exports = {
@@ -42,5 +36,6 @@ module.exports = {
   getById,
   addContact,
   removeContact,
-  updateContact
+  updateContact,
+  seedContacts
 };

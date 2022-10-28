@@ -7,8 +7,8 @@
   "scripts": {
     "test": "mocha index.test.js",
     "build": "webpack",
-    "start": "node ./dist/bundle.js",
-    "start1": "nodemon ./src/index.js"
+    "start": "nodemon ./src/index.js",
+    "seed": "node ./src/seed.js"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,8 @@
     "ejs": "^3.1.8",
     "express": "^4.18.1",
     "install": "^0.13.0",
+    "mongodb": "^4.11.0",
+    "mongoose": "^6.7.0",
     "nodemon": "^2.0.20",
     "npm": "^8.19.2",
     "webpack": "^5.74.0"
