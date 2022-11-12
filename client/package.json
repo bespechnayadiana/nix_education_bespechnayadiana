@@ -7,8 +7,8 @@
   "scripts": {
     "test": "mocha index.test.js",
     "build": "webpack",
-    "start": "nodemon ./src/index.js",
-    "seed": "node ./src/seed.js"
+    "start": "nodemon src/index.js",
+    "seed": "node src/seed.js"
   },
   "repository": {
     "type": "git",

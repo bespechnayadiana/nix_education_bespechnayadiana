@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require("client/src/connection/mongoose");
 
 const username = encodeURIComponent("Root");
 const password = encodeURIComponent("12345");
