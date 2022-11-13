@@ -4,8 +4,8 @@ const cors = require('cors');
 const passport = require('passport');
 
 require('dotenv').config();
+require('./passport');
 
-// const { listContacts, getById, addContact, removeContact, updateContact } = require('./services.js');
 const connectDb = require('./db');
 const auth = require('./routes/auth');
 const product = require('./routes/product');

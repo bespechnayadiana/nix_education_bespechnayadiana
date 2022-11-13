@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const username = encodeURIComponent(process.env.DB_NAME);
+const username = encodeURIComponent(process.env.DB_USER);
 const password = encodeURIComponent(process.env.DB_PASSWORD);
 const cluster = process.env.DB_CLUSTER;
 
