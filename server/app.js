@@ -27,4 +27,3 @@ connectDb()
   .on('error', console.log)
   .on('disconnected', connectDb)
   .once('open', startServer);
-
