@@ -23,8 +23,16 @@ const loginUser = async ({ email, password }) => {
   return buildUserResponse(user);
 };
 
+const validate = (email, password, name) => {
+  const validEmail = /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/.test(email);
+  const validPassword = /.{3,}$/.test(password);
+  const validName = /.+$/.test(name);
+
+  return validEmail && validPassword && validName;
+};
+
 const registerUser = async ({ email, password, name }) => {
-  // TODO validate
+  if (!validate(email, password, name)) return { status: 400, body: { message: 'Invalid user data' } };
 
   const exist = await findByEmail(email);
   if (exist) return { status: 400, body: { message: 'User already exist' } };

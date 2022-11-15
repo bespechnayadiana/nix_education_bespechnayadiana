@@ -130,7 +130,7 @@ const setupProductHandlers = () => {
   products.addEventListener('click', (e) => {
     const card = e.target.closest('.card');
     if (!card) return;
-    const product = items.find((p) => p._id === +card.dataset.id);
+    const product = items.find((p) => p._id === card.dataset.id);
     if (!e.target.classList.contains('js-no-dialog')) renderDetailModal(product);
     if (e.target.classList.contains('add-to-cart')) addToCart(product);
   });
