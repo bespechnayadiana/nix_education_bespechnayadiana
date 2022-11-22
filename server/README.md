@@ -1,1 +1,1 @@
-# nix_education_bespechnayadiana
+# Project for exam in NIX - Back-end part

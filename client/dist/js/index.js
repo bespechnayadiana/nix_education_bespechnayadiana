@@ -64,7 +64,7 @@ const loadProducts = async (search = '') => {
     renderProducts(items);
     renderDynamicFilters();
   } catch (e) {
-
+    console.log(e.message);
   }
 };
 
@@ -79,7 +79,7 @@ const onLoginUser = async (e) => {
     showUserName();
     loadProducts();
   } catch (e) {
-
+    console.log(e.message);
   }
 };
 
@@ -94,7 +94,7 @@ const onRegisterUser = async (e) => {
     showUserName();
     loadProducts();
   } catch (e) {
-
+    console.log(e.message);
   }
 };
 
