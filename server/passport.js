@@ -11,9 +11,9 @@ passport.use(new JWTStrategy({
   },
   async (jwtPayload, cb) => {
 
-  const user = await findByEmail(jwtPayload.email);
+    const user = await findByEmail(jwtPayload.email);
 
-  if (!user) return cb(null, false, { message: 'User not found' });
-  return cb(null, jwtPayload);
+    if (!user) return cb(null, false, { message: 'User not found' });
+    return cb(null, jwtPayload);
   }
 ));

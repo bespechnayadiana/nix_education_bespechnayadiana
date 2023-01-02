@@ -12,7 +12,7 @@ const addProduct = async (p) => {
 const seedProducts = async () => {
   await ProductModel.deleteMany({}).exec();
   await Promise.all(items.map(addProduct));
-  console.log('Contacts seeded!');
+  console.log('Products seeded!');
 };
 
 module.exports = {
